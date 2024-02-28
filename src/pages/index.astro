@@ -1,0 +1,35 @@
+---
+export const prerender = false;
+const searchParams = new URL(Astro.request.url).searchParams;
+const feedback = searchParams.get("feedback");
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>the Navbar Podcast</title>
+  </head>
+  <body>
+    <h1>The Navbar podcast</h1>
+    <form
+      action="/api/community-suggestion"
+      method="post"
+      class="flex flex-col"
+    >
+      <input
+        id="title"
+        name="title"
+        placeholder="Can you do an episode on GraphQL?"
+      />
+      <textarea
+        id="body"
+        name="body"
+        placeholder="I get types, but how do resolvers work?"></textarea>
+      <button>Submit</button>
+    </form>
+    {feedback && <p>{feedback}</p>}
+  </body>
+</html>
