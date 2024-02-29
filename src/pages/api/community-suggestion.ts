@@ -7,8 +7,13 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const title = formData.get("title");
   const body = formData.get("body");
 
-  if (!title || !body) {
-    const feedback = "Please fill out all fields";
+  if (!title) {
+    const feedback = "Please provide a title.";
+    return redirect(`/?feedback=${feedback}`);
+  }
+
+  if (!body) {
+    const feedback = "Please fill out a description in the elaboration field.";
     return redirect(`/?feedback=${feedback}`);
   }
 
@@ -60,7 +65,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
   console.log({ data });
 
-  const feedback = "Thanks for the feedback!";
+  const feedback = "Successfully sent, thank you!";
 
   return redirect(`/?feedback=${feedback}`);
 };
