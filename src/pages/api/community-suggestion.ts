@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, redirect }) => {
@@ -13,13 +14,12 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   }
 
   if (!body) {
-    const feedback = "Please fill out a description in the elaboration field.";
     return new Response(
       '<p class="mt-4 font-medium text-red-800">⚠️ Please add a description in the elaboration field</p>',
     );
   }
 
-  const data = await fetch("https://api.notion.com/v1/pages", {
+  await fetch("https://api.notion.com/v1/pages", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${import.meta.env.NOTION_API_SECRET}`,
