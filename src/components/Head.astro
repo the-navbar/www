@@ -30,7 +30,7 @@ const settings = await getEntry("settings", "index");
     description={description || settings.data.description}
     openGraph={{
       basic: {
-        title: title || settings.data.title,
+        title: title || settings.data.title + " | The NavBar Podcast",
         image: image || settings.data.ogImage.src,
         type: "website",
       },
@@ -40,7 +40,7 @@ const settings = await getEntry("settings", "index");
       site: "@the_navbar",
       creator: "@the_navbar",
       image: image || settings.data.ogImage.src,
-      title: title || settings.data.title,
+      title: title || settings.data.title + " | The NavBar Podcast",
       description: description || settings.data.description,
     }}
   />
