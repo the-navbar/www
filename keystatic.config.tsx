@@ -70,7 +70,8 @@ export default config({
           label: "ID",
         }),
         mp3Url: fields.url({
-          label: "The URL from the podcast host for the show",
+          label: "mp3 URL",
+          description: "The URL from the podcast host for the show",
         }),
         youtubeVideoId: fields.text({
           label: "YouTube Video ID",
