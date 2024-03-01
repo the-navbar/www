@@ -5,19 +5,19 @@ import Image from "astro/components/Image.astro";
 const settings = await getEntry("settings", "index");
 ---
 
-<header class="mx-auto w-full max-w-7xl p-4">
+<header class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
   <nav class="flex items-center justify-between">
-    <a href="/" class="transition hover:-rotate-3"
+    <a href="/" class="shadow transition hover:scale-95 hover:shadow-sm"
       ><Image
         src={settings.data.logo}
-        class="size-24 md:size-32"
+        class="size-24 rounded"
         alt="The NavBar logo"
       /></a
     >
     <div class="flex gap-8">
       <!-- <a href="/about">About</a> -->
-      <a class="font-medium" href="/shows">Shows</a>
-      <a class="font-medium" href="/suggestions">Suggestions</a>
+      <a class="font-medium hover:underline" href="/shows">Shows</a>
+      <a class="font-medium hover:underline" href="/suggestions">Suggestions</a>
     </div>
   </nav>
 </header>
