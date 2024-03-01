@@ -28,6 +28,11 @@ export default config({
           directory: "src/assets/settings",
           publicPath: "@/assets/settings",
         }),
+        ogImage: fields.image({
+          label: "Open Graph Image",
+          directory: "src/assets/settings",
+          publicPath: "@/assets/settings",
+        }),
         title: fields.text({
           label: "Site title",
           validation: {

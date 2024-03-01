@@ -1,28 +1,20 @@
 ---
-import Image from "astro/components/Image.astro";
+import Head from "@/components/Head.astro";
 import NavBar from "@/components/NavBar.astro";
 import Footer from "@/components/Footer.astro";
-import { getEntry } from "astro:content";
 
-const settings = await getEntry("settings", "index");
+import type { SeoProps } from "@/components/Head.astro";
+
+/* 
+  The SEO title, description and OG image can be passed by each page 
+  to the Layout component. They're optional, as the SEO component
+  ("@/components/Head.astro") has fallback values for each.  
+*/
+const { title, description, image } = Astro.props as SeoProps;
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>the Navbar Podcast</title>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome@1/+esm"
-    ></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
+  <Head {title} {description} {image} />
   <body class="font-poppins grid min-h-dvh grid-rows-[auto,minmax(0,1fr),auto]">
     <NavBar />
     <main class="w-full">

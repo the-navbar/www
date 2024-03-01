@@ -1,0 +1,62 @@
+---
+import { SEO } from "astro-seo";
+import { getEntry } from "astro:content";
+
+export type SeoProps = {
+  title?: string;
+  description?: string;
+  image?: string;
+};
+
+/*
+  If passed, these will be used for the page's meta tags.
+  If not, we'll fallback to the site settings.
+*/
+const { title, description, image } = Astro.props as SeoProps;
+
+// Getting site title + description fallbacks from site settings
+const settings = await getEntry("settings", "index");
+---
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+
+  <SEO
+    title={title || settings.data.title}
+    titleTemplate="%s | The NavBar Podcast"
+    titleDefault="The NavBar Podcast"
+    description={description || settings.data.description}
+    openGraph={{
+      basic: {
+        title: title || settings.data.title,
+        image: image || settings.data.ogImage.src,
+        type: "website",
+      },
+    }}
+    twitter={{
+      card: "summary_large_image",
+      site: "@the_navbar",
+      creator: "@the_navbar",
+      image: image || settings.data.ogImage.src,
+      title: title || settings.data.title,
+      description: description || settings.data.description,
+    }}
+  />
+
+  <!-- Media Chrome audio player -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome@1/+esm"
+  ></script>
+
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Shoutout to Astro -->
+  <meta name="generator" content={Astro.generator} />
+</head>

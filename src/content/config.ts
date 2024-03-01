@@ -8,6 +8,7 @@ const settingsCollection = defineCollection({
       description: z.string(),
       twitterHandle: z.string(),
       logo: image(),
+      ogImage: image(),
     }),
 });
 
