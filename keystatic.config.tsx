@@ -1,9 +1,7 @@
 import { collection, config, fields, singleton } from "@keystatic/core";
 import { Icon } from "@keystar/ui/icon";
 import { mic2Icon } from "@keystar/ui/icon/icons/mic2Icon";
-import { youtubeIcon } from "@keystar/ui/icon/icons/youtubeIcon";
 import { __experimental_mdx_field } from "@keystatic/core/form/fields/markdoc";
-import { block, wrapper } from "@keystatic/core/content-components";
 
 export default config({
   storage: {

@@ -9,13 +9,13 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
   if (!title) {
     return new Response(
-      '<p class="mt-4 font-medium text-red-800">⚠️ Please provide a title</p>',
+      '<p class="mt-4 font-medium text-red-800">🚨 Please provide a title to your suggestion.</p>',
     );
   }
 
   if (!body) {
     return new Response(
-      '<p class="mt-4 font-medium text-red-800">⚠️ Please add a description in the elaboration field</p>',
+      '<p class="mt-4 font-medium text-red-800">🚨 Please add a description in the elaboration field.</p>',
     );
   }
 

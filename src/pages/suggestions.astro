@@ -1,10 +1,6 @@
 ---
 import Layout from "../layouts/BaseLayout.astro";
 import { cx } from "../utils";
-export const prerender = false;
-const searchParams = new URL(Astro.request.url).searchParams;
-const feedback = searchParams.get("feedback");
-const hasError = feedback?.startsWith("Please");
 
 const formFieldClasses = cx(
   "rounded border p-2 border-slate-300 text-slate-900",
@@ -25,8 +21,8 @@ const formFieldClasses = cx(
     </div>
 
     <form
-      action="/api/community-suggestion"
-      method="post"
+      hx-post="/api/community-suggestion"
+      hx-target="#feedback"
       class="mt-8 grid gap-4"
     >
       <label class="grid gap-1">
@@ -35,7 +31,6 @@ const formFieldClasses = cx(
           id="title"
           name="title"
           placeholder="Can you do an episode on GraphQL?"
-          required
           class={formFieldClasses}
         />
       </label>
@@ -47,7 +42,6 @@ const formFieldClasses = cx(
           id="body"
           name="body"
           placeholder="I get types, but how do resolvers work?"
-          required
           class={formFieldClasses}></textarea>
       </label>
       <button
@@ -58,15 +52,6 @@ const formFieldClasses = cx(
         <span>🤙</span>
       </button>
     </form>
-    {
-      feedback && (
-        <p
-          class={`mt-4 font-medium ${hasError ? "text-red-800" : "text-green-700"}`}
-        >
-          {hasError ? "⚠️" : "✅"}
-          {feedback}
-        </p>
-      )
-    }
+    <div id="feedback"></div>
   </div>
 </Layout>
