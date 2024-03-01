@@ -14,6 +14,9 @@ export default config({
       name: "The NavBar Podcast",
       mark: () => <Icon src={mic2Icon} />,
     },
+    navigation: {
+      "Take a sip of water!": ["shows", "settings"],
+    },
   },
   singletons: {
     settings: singleton({
