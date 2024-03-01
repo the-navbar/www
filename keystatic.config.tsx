@@ -35,12 +35,16 @@ export default config({
         }),
         title: fields.text({
           label: "Site title",
+          description:
+            "Will be used for the homepage headline and fallback SEO title tag",
           validation: {
             isRequired: true,
           },
         }),
         description: fields.text({
           label: "Site description",
+          description:
+            "Will be used for the homepage description and fallback SEO description meta tag",
           multiline: true,
           validation: {
             isRequired: true,
