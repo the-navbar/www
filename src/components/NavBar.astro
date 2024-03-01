@@ -1,0 +1,23 @@
+---
+import { getEntry } from "astro:content";
+import Image from "astro/components/Image.astro";
+
+const settings = await getEntry("settings", "index");
+---
+
+<header class="mx-auto w-full max-w-7xl p-4">
+  <nav class="flex items-center justify-between">
+    <a href="/" class="transition hover:-rotate-3"
+      ><Image
+        src={settings.data.logo}
+        class="size-32"
+        alt="The NavBar logo"
+      /></a
+    >
+    <div class="flex gap-8">
+      <!-- <a href="/about">About</a> -->
+      <a class="font-medium" href="/shows">Shows</a>
+      <a class="font-medium" href="/suggestions">Suggestions</a>
+    </div>
+  </nav>
+</header>

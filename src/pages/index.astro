@@ -1,81 +1,22 @@
 ---
-import { cx } from "../utils";
-export const prerender = false;
-const searchParams = new URL(Astro.request.url).searchParams;
-const feedback = searchParams.get("feedback");
-const hasError = feedback?.startsWith("Please");
+import { getEntry } from "astro:content";
+import Layout from "../layouts/BaseLayout.astro";
+import ShowsList from "@/components/ShowsList.astro";
 
-const formFieldClasses = cx(
-  "rounded border p-2 border-slate-300 text-slate-900",
-  "focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-600",
-);
+const settings = await getEntry("settings", "index");
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>the Navbar Podcast</title>
-  </head>
-  <body>
-    <div class="mx-auto max-w-2xl px-4 py-16">
-      <h1 class="text-2xl font-medium">The Navbar Podcast</h1>
-
-      <div class="mt-4 grid gap-2 text-lg text-slate-600">
-        <p>
-          Have a suggestion for an episode topic, or just a question you'd like
-          us to answer on the podcast?
-        </p>
-        <p>Suggest away, it'll make its way to our planinng database 🤙</p>
+<Layout>
+  <div class="mx-auto max-w-7xl px-4 py-16">
+    <div class="max-w-xl">
+      <h1 class="text-5xl font-medium">{settings.data.title}</h1>
+      <div class="mt-6 grid gap-2 text-xl text-slate-600">
+        <p>{settings.data.description}</p>
       </div>
-
-      <form
-        action="/api/community-suggestion"
-        method="post"
-        class="mt-8 grid gap-4"
-      >
-        <label class="grid gap-1">
-          <span class="text-sm font-medium text-slate-600">Title</span>
-          <input
-            id="title"
-            name="title"
-            placeholder="Can you do an episode on GraphQL?"
-            required
-            class={formFieldClasses}
-          />
-        </label>
-        <label class="grid gap-1">
-          <span class="text-sm font-medium text-slate-600"
-            >Elaborate a little</span
-          >
-          <textarea
-            id="body"
-            name="body"
-            placeholder="I get types, but how do resolvers work?"
-            required
-            class={formFieldClasses}></textarea>
-        </label>
-        <button
-          class="flex items-center gap-4 justify-self-start rounded-md bg-gradient-to-tr from-indigo-600 to-violet-500 px-6 py-2 text-white hover:bg-gradient-to-br focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-offset-1 focus:ring-offset-indigo-600 active:to-indigo-600"
-        >
-          <span class="text-sm font-medium uppercase tracking-wider"
-            >Send it</span
-          >
-          <span>🤙</span>
-        </button>
-      </form>
-      {
-        feedback && (
-          <p
-            class={`mt-4 font-medium ${hasError ? "text-red-800" : "text-green-700"}`}
-          >
-            {hasError ? "⚠️" : "✅"}
-            {feedback}
-          </p>
-        )
-      }
     </div>
-  </body>
-</html>
+    <h2 class="mt-16 text-2xl font-medium">Episodes</h2>
+    <div class="mt-6">
+      <ShowsList />
+    </div>
+  </div>
+</Layout>
