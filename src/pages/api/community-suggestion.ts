@@ -8,16 +8,18 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const body = formData.get("body");
 
   if (!title) {
-    const feedback = "Please provide a title.";
-    return redirect(`/?feedback=${feedback}`);
+    return new Response(
+      '<p class="mt-4 font-medium text-red-800">⚠️ Please provide a title</p>',
+    );
   }
 
   if (!body) {
-    const feedback = "Please fill out a description in the elaboration field.";
-    return redirect(`/?feedback=${feedback}`);
+    return new Response(
+      '<p class="mt-4 font-medium text-red-800">⚠️ Please add a description in the elaboration field</p>',
+    );
   }
 
-  const data = await fetch("https://api.notion.com/v1/pages", {
+  await fetch("https://api.notion.com/v1/pages", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${import.meta.env.NOTION_API_SECRET}`,
@@ -63,9 +65,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     }),
   }).then((res) => res.json());
 
-  console.log({ data });
-
-  const feedback = "Successfully sent, thank you!";
-
-  return redirect(`/?feedback=${feedback}`);
+  return new Response(
+    '<p class="mt-4 font-medium text-green-700">✅ Successfully sent, thank you!</p>',
+  );
 };
