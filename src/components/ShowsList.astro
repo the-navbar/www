@@ -7,9 +7,9 @@ const sortedShows = shows.sort((a, b) => a.data.id - b.data.id);
 
 {
   shows.length > 0 && (
-    <ul class="grid gap-x-8 gap-y-6 lg:grid-cols-3">
+    <ul class="grid gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
       {sortedShows.map((show) => (
-        <li class="flex items-center justify-between gap-4 rounded-lg p-6 shadow-md ring-1 ring-black/5">
+        <li class="flex items-center justify-between gap-6 rounded-lg p-6 shadow-md ring-1 ring-black/5">
           <h2 class="text-lg font-medium">
             <a href={`/shows/${show.slug}`} class="hover:underline">
               {show.data.title}
@@ -17,19 +17,18 @@ const sortedShows = shows.sort((a, b) => a.data.id - b.data.id);
           </h2>
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-6 shrink-0 stroke-violet-500 transition hover:stroke-slate-900"
+            class="size-6 shrink-0 stroke-slate-500 hover:stroke-purple-600"
           >
-            <rect width="20" height="16" x="2" y="4" rx="2" />
-            <circle cx="8" cy="10" r="2" />
-            <path d="M8 12h8" />
-            <circle cx="16" cy="10" r="2" />
-            <path d="m6 20 .7-2.9A1.4 1.4 0 0 1 8.1 16h7.8a1.4 1.4 0 0 1 1.4 1l.7 3" />
+            <circle cx="12" cy="12" r="10" />
+            <polygon points="10 8 16 12 10 16 10 8" />
           </svg>
         </li>
       ))}

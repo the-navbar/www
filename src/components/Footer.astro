@@ -4,9 +4,12 @@ import { getEntry } from "astro:content";
 const settings = await getEntry("settings", "index");
 ---
 
-<footer class="mx-auto w-full max-w-7xl px-4 py-8">
-  <p class="mt-8 flex items-center justify-center gap-4">
-    <span> Follow-us on Twitter: </span>
+<footer
+  class="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-2 px-4 py-8 sm:flex-row sm:gap-8"
+>
+  <p>Copyright &copy; {new Date().getFullYear()}</p>
+  <p class="flex items-center justify-center gap-4">
+    <span>We're on Twitter:</span>
     <a
       href={`https://twitter.com/${settings.data.twitterHandle}`}
       class="inline-block"
