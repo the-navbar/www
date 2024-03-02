@@ -15,10 +15,7 @@ const sortedShows = shows.sort((a, b) => a.data.id - b.data.id);
               {show.data.title}
             </a>
           </h2>
-          <button
-            @click={`$store.player.slug = "${show.slug}", 
-              $store.player.toggle()`}
-          >
+          <button @click={`$store.player.setShow('${show.slug}')`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

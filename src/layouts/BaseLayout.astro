@@ -1,13 +1,9 @@
 ---
-import { getCollection } from "astro:content";
-
 import Head from "@/components/Head.astro";
 import NavBar from "@/components/NavBar.astro";
 import Footer from "@/components/Footer.astro";
 import type { SeoProps } from "@/components/Head.astro";
 import AudioPlayer from "@/components/AudioPlayer.astro";
-
-const shows = await getCollection("shows");
 
 /* 
   The SEO title, description and OG image can be passed by each page 
@@ -27,25 +23,6 @@ const { title, description, image } = Astro.props as SeoProps;
       <slot />
     </main>
     <Footer />
-
-    <!-- Audio Player -->
-    <div x-show="$store.player.slug !== null">
-      <AudioPlayer transition:persist />
-    </div>
-    <script define:vars={{ shows }}>
-      // Alpine.js global store
-      document.addEventListener("alpine:init", () => {
-        Alpine.store("player", {
-          slug: null,
-          isPlaying: false,
-          get show() {
-            return shows.filter((show) => show.slug === this.slug)[0] || {};
-          },
-          toggle() {
-            this.isPlaying = !this.isPlaying;
-          },
-        });
-      });
-    </script>
+    <AudioPlayer transition:persist />
   </body>
 </html>

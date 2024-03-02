@@ -1,22 +1,45 @@
 ---
+import { getCollection, type CollectionEntry } from "astro:content";
 
+type Player = {
+  status: "hidden" | "paused" | "playing";
+  show: CollectionEntry<"shows">;
+};
+
+const shows = await getCollection("shows");
 ---
 
-<p x-text="store.player.show.data.mp3Url"></p>
+<template x-if="$store.player.slug !== undefined">
+  <media-controller audio class="fixed inset-x-0 bottom-0 p-4 backdrop-blur-sm">
+    <audio slot="media" :src="$store.player.show.data.mp3Url"></audio>
+    <div class="mt-2 flex h-6 justify-between text-white">
+      <p x-text="$store.player.show.data.title"></p>
+    </div>
+    <div>+ - x</div>
 
-<media-controller audio class="fixed inset-x-0 bottom-0 p-4 backdrop-blur-sm">
-  <audio slot="media" :src="$store.player.show.data.mp3Url"></audio>
-  <div class="mt-2 flex h-6 justify-between text-white">
-    <p x-text="$store.player.show.data.title"></p>
-  </div>
-  <div>+ - x</div>
+    <media-control-bar class="w-full">
+      <media-play-button></media-play-button>
+      <media-time-display showduration></media-time-display>
+      <media-time-range></media-time-range>
+      <media-playback-rate-button></media-playback-rate-button>
+      <media-mute-button></media-mute-button>
+      <media-volume-range></media-volume-range>
+    </media-control-bar>
+  </media-controller>
+</template>
 
-  <media-control-bar class="w-full">
-    <media-play-button></media-play-button>
-    <media-time-display showduration></media-time-display>
-    <media-time-range></media-time-range>
-    <media-playback-rate-button></media-playback-rate-button>
-    <media-mute-button></media-mute-button>
-    <media-volume-range></media-volume-range>
-  </media-control-bar>
-</media-controller>
+<script define:vars={{ shows }}>
+  document.addEventListener("alpine:init", () => {
+    Alpine.store("player", {
+      slug: undefined,
+      isPlaying: false,
+      get show() {
+        return shows.filter((show) => show.slug === this.slug)[0] || {};
+      },
+      setShow(slug, isPlaying = true) {
+        this.slug = slug;
+        this.isPlaying = isPlaying;
+      },
+    });
+  });
+</script>
