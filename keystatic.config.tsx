@@ -5,8 +5,10 @@ import { __experimental_mdx_field } from "@keystatic/core/form/fields/markdoc";
 
 export default config({
   storage: {
-    kind: "local",
+    kind: process.env.NODE_ENV === "production" ? "cloud" : "local",
   },
+  // Keystatic cloud project key
+  cloud: { project: "simonswiss/the-navbar" },
   ui: {
     brand: {
       name: "The NavBar Podcast",
