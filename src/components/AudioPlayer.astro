@@ -1,14 +1,17 @@
 ---
-type AudioPlayerProps = {
-  url: string;
-};
 
-const { url } = Astro.props as AudioPlayerProps;
 ---
 
-<media-controller audio class="bg-transparent">
-  <audio slot="media" src={url}></audio>
-  <media-control-bar class="w-full rounded-lg bg-slate-200 p-8">
+<p x-text="store.player.show.data.mp3Url"></p>
+
+<media-controller audio class="fixed inset-x-0 bottom-0 p-4 backdrop-blur-sm">
+  <audio slot="media" :src="$store.player.show.data.mp3Url"></audio>
+  <div class="mt-2 flex h-6 justify-between text-white">
+    <p x-text="$store.player.show.data.title"></p>
+  </div>
+  <div>+ - x</div>
+
+  <media-control-bar class="w-full">
     <media-play-button></media-play-button>
     <media-time-display showduration></media-time-display>
     <media-time-range></media-time-range>
