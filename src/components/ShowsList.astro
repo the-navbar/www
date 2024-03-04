@@ -15,23 +15,39 @@ const sortedShows = shows.sort((a, b) => a.data.id - b.data.id);
               {show.data.title}
             </a>
           </h2>
-          <button @click={`$store.player.setShow('${show.slug}')`}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="size-6 shrink-0 stroke-slate-500 hover:stroke-purple-600"
+          <template
+            x-if={`$store.player.current_show !== null && $store.player.current_show.slug === '${show.slug}'`}
+          >
+            <media-play-button
+              mediacontroller="audio-player"
+              class="rounded-full"
+            />
+          </template>
+          <template
+            x-if={`$store.player.current_show === null || $store.player.current_show.slug !== '${show.slug}'`}
+          >
+            <button
+              data-show={show.slug}
+              data-show-button
+              @click={`$store.player.start_show('${show.slug}')`}
             >
-              <circle cx="12" cy="12" r="10" />
-              <polygon points="10 8 16 12 10 16 10 8" />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-6 shrink-0 stroke-slate-500 hover:stroke-purple-600"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="10 8 16 12 10 16 10 8" />
+              </svg>
+            </button>
+          </template>
         </li>
       ))}
     </ul>

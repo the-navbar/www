@@ -2,69 +2,89 @@
 import { cx } from "@/utils";
 import { getCollection, type CollectionEntry } from "astro:content";
 
-type Player = {
-  status: "hidden" | "paused" | "playing";
-  show: CollectionEntry<"shows">;
+type PlayerState = {
+  current_show: null | CollectionEntry<"shows">;
+  playing: boolean;
+  current_time: number;
+  audio?: HTMLAudioElement;
+  title: string;
+  url: string;
+  media_controller?: HTMLAudioElement;
+  status: "INITIAL" | "LOADED" | "PAUSED" | "PLAYING";
+};
+
+const initialData: PlayerState = {
+  current_show: null,
+  current_time: 0,
+  playing: false,
+  title: "",
+  url: "",
+  status: "INITIAL",
 };
 
 const shows = await getCollection("shows");
 ---
 
-<template x-if="$store.player.slug !== undefined">
-  <media-controller
-    audio
-    class={cx(
-      "fixed inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
-      "[--media-preview-background:theme(colors.emerald.100)] [--media-secondary-color:transparent] [--media-primary-color:theme(colors.slate.900)] [--media-control-hover-background:rgb(0_0_0/0.05)]",
-    )}
-  >
-    <audio slot="media" :src="$store.player.show.data.mp3Url"></audio>
-    <div class="mb-4 flex h-6 items-center justify-between">
-      <p
-        class="font-medium text-slate-900"
-        x-text="$store.player.show.data.title"
+<media-controller
+  x-show="$store.player.current_show"
+  transition:persist
+  id="audio-player"
+  audio
+  :class="$store.player.current_show ? 'opacity-100' : 'opacity-0'"
+  class={cx(
+    "fixed inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
+    "[--media-preview-background:theme(colors.emerald.100)] [--media-secondary-color:transparent] [--media-primary-color:theme(colors.slate.900)] [--media-control-hover-background:rgb(0_0_0/0.05)]",
+  )}
+>
+  <audio autoplay slot="media" :src="$store.player.url"></audio>
+  <div class="mb-4 flex h-6 items-center justify-between">
+    <p class="font-medium text-slate-900" x-text="$store.player.title"></p>
+    <button @click="$store.player.reset()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="size-5 stroke-slate-600 hover:stroke-slate-900"
+        ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
       >
-      </p>
-      <button @click="$store.player.setShow(undefined)">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="size-5 stroke-slate-600 hover:stroke-slate-900"
-          ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
-        >
-      </button>
-    </div>
+    </button>
+  </div>
 
-    <media-control-bar class={cx("w-full bg-transparent")}>
-      <media-play-button></media-play-button>
-      <media-time-display showduration></media-time-display>
-      <media-time-range
-        class={cx(
-          "[--media-range-track-color:red] [--media-range-bar-color:theme(colors.sky.400)] [--media-range-thumb-border-radius:2px] [--media-range-thumb-height:12px] [--media-preview-time-text-shadow:none] [--media-range-track-border-radius:4px]",
-        )}></media-time-range>
-      <media-playback-rate-button></media-playback-rate-button>
-      <media-mute-button></media-mute-button>
-      <media-volume-range></media-volume-range>
-    </media-control-bar>
-  </media-controller>
-</template>
+  <media-control-bar class={cx("w-full bg-transparent")}>
+    <media-play-button></media-play-button>
+    <media-time-display showduration></media-time-display>
+    <media-time-range
+      class={cx(
+        "[--media-range-track-color:red] [--media-range-bar-color:theme(colors.sky.400)] [--media-range-thumb-border-radius:2px] [--media-range-thumb-height:12px] [--media-preview-time-text-shadow:none] [--media-range-track-border-radius:4px]",
+      )}></media-time-range>
+    <media-playback-rate-button></media-playback-rate-button>
+    <media-mute-button></media-mute-button>
+    <media-volume-range></media-volume-range>
+  </media-control-bar>
+</media-controller>
 
-<script define:vars={{ shows }}>
+<script define:vars={{ shows, initialData }}>
   document.addEventListener("alpine:init", () => {
     Alpine.store("player", {
-      slug: undefined,
-      isPlaying: false,
-      get show() {
-        return shows.filter((show) => show.slug === this.slug)[0] || {};
+      ...initialData,
+      start_show(slug, start_time = 0) {
+        const show = shows.find((s) => s.slug === slug);
+        this.current_show = show;
+        this.playing = true;
+        this.status = "PLAYING";
+        this.title = show.data.title;
+        this.url = show.data.mp3Url;
+        this.current_time = start_time;
       },
-      setShow(slug, isPlaying = true) {
-        this.slug = slug;
-        this.isPlaying = isPlaying;
+      reset() {
+        console.log("resetting");
+        this.current_show = null;
+        this.playing = false;
+        this.status = "INITIAL";
       },
     });
   });

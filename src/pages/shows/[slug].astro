@@ -1,7 +1,6 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Layout from "@/layouts/BaseLayout.astro";
-import AudioPlayer from "@/components/AudioPlayer.astro";
 import YouTubeVideo from "@/components/YouTubeVideo.astro";
 
 export async function getStaticPaths() {
@@ -33,29 +32,20 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
 
     <div class="mt-8">
       <button
-        @click={`$store.player.setShow('${show.slug}')`}
-        class="group flex items-center gap-4 rounded-lg bg-white px-6 py-4 shadow ring-1 ring-black/5 transition duration-75 hover:shadow-md hover:ring-black/20"
+        @click={`$store.player.start_show('${show.slug}')`}
+        class="group flex items-center gap-4 rounded-lg bg-white px-6 py-4 shadow
+        ring-1 ring-black/5 transition duration-75 hover:shadow-md hover:ring-black/20"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="size-6 shrink-0 stroke-slate-500 group-hover:stroke-purple-600"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-          <polygon points="10 8 16 12 10 16 10 8"></polygon>
-        </svg>
-        <span class="font-medium text-slate-500 group-hover:text-slate-800"
-          >Play this episode</span
+        <media-play-button class="peer" mediacontroller="audio-player">
+          <span slot="play">Play</span>
+          <span slot="pause">Pause</span>
+        </media-play-button>
+        <span class="font-medium text-slate-500 group-hover:text-slate-800">
+          this episode</span
         >
       </button>
     </div>
+
     <div class="grid gap-2 text-lg text-slate-600">
       <div class="prose prose-slate mt-8 lg:prose-lg">
         <Content
