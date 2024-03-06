@@ -79,6 +79,7 @@ export default config({
       format: {
         contentField: "description",
       },
+      columns: ["publishedOn"],
       entryLayout: "content",
       schema: {
         title: fields.slug({
