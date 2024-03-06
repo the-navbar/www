@@ -6,7 +6,8 @@ const settingsCollection = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
-      twitterHandle: z.string(),
+      twitterUrl: z.string(),
+      discordInviteUrl: z.string(),
       logo: image(),
       ogImage: image(),
     }),

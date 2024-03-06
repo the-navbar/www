@@ -53,9 +53,16 @@ export default config({
             isRequired: true,
           },
         }),
-        twitterHandle: fields.text({
-          label: "Twitter handle",
-          description: "Your Twitter handle, without the @ symbol",
+        twitterUrl: fields.text({
+          label: "Twitter URL",
+          description: "The Twitter URL for the NavBar account",
+          validation: {
+            isRequired: true,
+          },
+        }),
+        discordInviteUrl: fields.text({
+          label: "Discord Invite URL",
+          description: "The URL to join the NavBar Discord server",
           validation: {
             isRequired: true,
           },
