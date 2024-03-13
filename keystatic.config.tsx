@@ -27,7 +27,7 @@ export default config({
       mark: () => <Icon src={mic2Icon} />,
     },
     navigation: {
-      "Take a sip of water!": ["shows", "settings"],
+      "Take a sip of water!": ["shows", "guests", "settings"],
     },
   },
   singletons: {
@@ -82,7 +82,6 @@ export default config({
       },
     }),
   },
-
   collections: {
     shows: collection({
       label: "Shows",
@@ -113,6 +112,54 @@ export default config({
         description: __experimental_mdx_field({
           label: "Description",
         }),
+      },
+    }),
+    guests: collection({
+      label: "Guests",
+      path: "src/content/guests/*",
+      slugField: "name",
+      schema: {
+        name: fields.slug({
+          name: { label: "Name", validation: { isRequired: true } },
+        }),
+        avatarUrl: fields.url({
+          label: "Avatar URL",
+          description: "The URL for the guest's avatar",
+          validation: { isRequired: true },
+        }),
+        shows: fields.array(
+          fields.relationship({
+            label: "Shows",
+            collection: "shows",
+          }),
+          {
+            label: "Shows",
+            description: "Episodes this guest has appeared in.",
+            validation: { length: { min: 1 } },
+            itemLabel: (props) => props.value || "",
+          },
+        ),
+        links: fields.array(
+          fields.object(
+            {
+              label: fields.text({
+                label: "Label",
+                validation: { isRequired: true },
+              }),
+              url: fields.url({
+                label: "URL",
+                validation: { isRequired: true },
+              }),
+            },
+            { label: "Link", layout: [4, 8] },
+          ),
+          {
+            label: "Links",
+            description: "Any personal links the guest would like to share.",
+            itemLabel: (props) =>
+              props.fields.label.value + " — " + props.fields.url.value,
+          },
+        ),
       },
     }),
   },

@@ -13,6 +13,12 @@ export async function getStaticPaths() {
 
 const show = await getEntry("shows", Astro.params.slug);
 
+const guests = await getCollection("guests");
+const showGuests = guests.filter((guest) => {
+  const shows = guest.data.shows.map((show) => show.slug);
+  return shows.includes(show.slug);
+});
+
 const { Content } = await show.render();
 
 const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
@@ -30,6 +36,43 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
         datetime={show.data.publishedOn.toString()}>{prettyDate}</time
       >
     </p>
+
+    {
+      showGuests.length > 0 && (
+        <div class="mt-8">
+          <h2 class="text-sm font-medium text-slate-600">Featuring:</h2>
+          <ul class="mt-4 flex items-center gap-4">
+            {showGuests.map((guest) => (
+              <li class="flex items-center gap-4">
+                <img
+                  src={guest.data.avatarUrl}
+                  class="size-20 rounded-full object-cover shadow-lg ring-1 ring-black/5"
+                  alt=""
+                />
+                <div>
+                  <h3 class="text-lg font-medium">{guest.data.name}</h3>
+                  {guest.data.links.length > 0 && (
+                    <ul class="flex gap-4">
+                      {guest.data.links.map((link) => (
+                        <li>
+                          <a
+                            href={link.url}
+                            class="text-sm underline hover:no-underline"
+                          >
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
     <div class="mt-12 grid gap-2 text-lg text-slate-600">
       <AudioPlayer url={show.data.mp3Url} />
       <div class="prose prose-slate mt-8 lg:prose-lg">

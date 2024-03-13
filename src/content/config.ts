@@ -1,4 +1,4 @@
-import { z, defineCollection } from "astro:content";
+import { z, defineCollection, reference } from "astro:content";
 
 const settingsCollection = defineCollection({
   type: "data",
@@ -23,7 +23,22 @@ const showsCollection = defineCollection({
   }),
 });
 
+const guestsCollection = defineCollection({
+  schema: z.object({
+    name: z.string(),
+    avatarUrl: z.string().url(),
+    shows: z.array(reference("shows")),
+    links: z.array(
+      z.object({
+        label: z.string(),
+        url: z.string().url(),
+      }),
+    ),
+  }),
+});
+
 export const collections = {
   settings: settingsCollection,
   shows: showsCollection,
+  guests: guestsCollection,
 };
