@@ -1,14 +1,26 @@
-import { collection, config, fields, singleton } from "@keystatic/core";
+import {
+  collection,
+  config,
+  fields,
+  singleton,
+  type LocalConfig,
+  type GitHubConfig,
+} from "@keystatic/core";
 import { Icon } from "@keystar/ui/icon";
 import { mic2Icon } from "@keystar/ui/icon/icons/mic2Icon";
 import { __experimental_mdx_field } from "@keystatic/core/form/fields/markdoc";
 
+const localStorage: LocalConfig["storage"] = {
+  kind: "local",
+};
+
+const gitHubStorage: GitHubConfig["storage"] = {
+  kind: "github",
+  repo: "the-navbar/www",
+};
+
 export default config({
-  storage: {
-    kind: process.env.NODE_ENV === "production" ? "cloud" : "local",
-  },
-  // Keystatic cloud project key
-  cloud: { project: "simonswiss/the-navbar" },
+  storage: process.env.NODE_ENV === "production" ? gitHubStorage : localStorage,
   ui: {
     brand: {
       name: "The NavBar Podcast",
