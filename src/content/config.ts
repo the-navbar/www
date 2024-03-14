@@ -44,7 +44,7 @@ const guestsCollection = defineCollection({
   }),
 });
 
-const navabarTeamCollection = defineCollection({
+const teamCollection = defineCollection({
   schema: z.object({
     name: z.string(),
     avatarUrl: z.string().url(),
@@ -56,5 +56,5 @@ export const collections = {
   settings: settingsCollection,
   shows: showsCollection,
   guests: guestsCollection,
-  navbarTeam: navabarTeamCollection,
+  team: teamCollection,
 };

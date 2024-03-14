@@ -28,7 +28,7 @@ export default config({
       mark: () => <Icon src={mic2Icon} />,
     },
     navigation: {
-      "Take a sip of water!": ["shows", "guests", "navbarTeam", "settings"],
+      "Take a sip of water!": ["shows", "guests", "team", "settings"],
     },
   },
   singletons: {
@@ -152,7 +152,7 @@ export default config({
         links,
       },
     }),
-    navbarTeam: collection({
+    team: collection({
       label: "The NavBar Team",
       path: "src/content/team/*",
       slugField: "name",

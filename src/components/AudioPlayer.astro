@@ -6,63 +6,68 @@ const shows = await getCollection("shows");
 ---
 
 <div transition:persist>
-  <template x-if="$store.player.current_show">
-    <media-controller
-      id="audio-player"
-      audio
-      class={cx(
-        "fixed inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
-        "[--media-preview-background:theme(colors.emerald.100)] [--media-secondary-color:transparent] [--media-primary-color:theme(colors.slate.900)] [--media-control-hover-background:rgb(0_0_0/0.05)]",
-      )}
-    >
-      <audio autoplay slot="media" :src="$store.player.current_show.data.mp3Url"
+  <media-controller
+    id="audio-player"
+    audio
+    :class="$store.player.show ? 'fixed' : 'hidden'"
+    class={cx(
+      "inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
+      "[--media-preview-background:theme(colors.emerald.100)] [--media-secondary-color:transparent] [--media-primary-color:theme(colors.slate.900)] [--media-control-hover-background:rgb(0_0_0/0.05)]",
+    )}
+  >
+    <template x-if="$store.player.show">
+      <audio autoplay slot="media" :src="$store.player.show.data.mp3Url"
       ></audio>
-      <div class="mb-4 flex h-6 items-center justify-between">
+    </template>
+
+    <div class="mb-4 flex h-6 items-center justify-between">
+      <template x-if="$store.player.show">
         <p
+          x-show="$store.player.show"
           class="font-medium text-slate-900"
-          x-text="$store.player.current_show.data.title"
+          x-text="$store.player.show.data.title"
         >
         </p>
-        <button @click="$store.player.reset()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-5 stroke-slate-600 hover:stroke-slate-900"
-            ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
-          >
-        </button>
-      </div>
+      </template>
+      <button @click="$store.player.reset()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="size-5 stroke-slate-600 hover:stroke-slate-900"
+          ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
+        >
+      </button>
+    </div>
 
-      <media-control-bar class={cx("w-full bg-transparent")}>
-        <media-play-button></media-play-button>
-        <media-time-display showduration></media-time-display>
-        <media-time-range
-          class={cx(
-            "[--media-range-track-color:red] [--media-range-bar-color:theme(colors.sky.400)] [--media-range-thumb-border-radius:2px] [--media-range-thumb-height:12px] [--media-preview-time-text-shadow:none] [--media-range-track-border-radius:4px]",
-          )}></media-time-range>
-        <media-playback-rate-button></media-playback-rate-button>
-        <media-mute-button></media-mute-button>
-        <media-volume-range></media-volume-range>
-      </media-control-bar>
-    </media-controller>
-  </template>
+    <media-control-bar class={cx("w-full bg-transparent")}>
+      <media-play-button></media-play-button>
+      <media-time-display showduration></media-time-display>
+      <media-time-range
+        class={cx(
+          "[--media-range-track-color:red] [--media-range-bar-color:theme(colors.sky.400)] [--media-range-thumb-border-radius:2px] [--media-range-thumb-height:12px] [--media-preview-time-text-shadow:none] [--media-range-track-border-radius:4px]",
+        )}></media-time-range>
+      <media-playback-rate-button></media-playback-rate-button>
+      <media-mute-button></media-mute-button>
+      <media-volume-range></media-volume-range>
+    </media-control-bar>
+  </media-controller>
 </div>
 
 <script define:vars={{ shows }}>
   document.addEventListener("alpine:init", () => {
     Alpine.store("player", {
-      current_show: null,
-      start_show(slug) {
+      show: null,
+      set(slug) {
         const show = shows.find((s) => s.slug === slug);
-        this.current_show = show;
+        this.show = show;
       },
       reset() {
-        this.current_show = null;
+        this.show = null;
       },
     });
   });

@@ -1,6 +1,5 @@
 ---
 import { getCollection, getEntry } from "astro:content";
-
 import { Image } from "astro:assets";
 
 import Layout from "@/layouts/BaseLayout.astro";
@@ -21,7 +20,7 @@ const showGuests = guests.filter((guest) => {
   return shows.includes(show.slug);
 });
 
-const navbarTeam = await getCollection("navbarTeam");
+const team = await getCollection("team");
 
 const { Content } = await show.render();
 
@@ -83,7 +82,17 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
       }
     </div>
 
-    <AudioPlayer url={show.data.mp3Url} />
+    <div class="mt-8">
+      <media-play-button
+        mediacontroller="audio-player"
+        class="inline-flex items-center gap-4 rounded-lg bg-transparent bg-white p-0 px-6 py-4 font-poppins text-base font-medium text-slate-500 shadow ring-1 ring-black/5 transition duration-75 hover:text-slate-700 hover:shadow-md hover:ring-black/20"
+        @click={`$store.player.set('${show.slug}')`}
+      >
+        <span slot="play">Play this episode</span>
+        <span slot="pause">Pause this episode</span>
+      </media-play-button>
+    </div>
+
     <div class="mt-8">
       <Content />
     </div>
