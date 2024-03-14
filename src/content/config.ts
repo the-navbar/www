@@ -1,5 +1,14 @@
 import { z, defineCollection, reference } from "astro:content";
 
+// Reusable thingy
+const links = z.array(
+  z.object({
+    label: z.string(),
+    url: z.string().url(),
+  }),
+);
+
+// Collections
 const settingsCollection = defineCollection({
   type: "data",
   schema: ({ image }) =>
@@ -17,6 +26,7 @@ const showsCollection = defineCollection({
   schema: z.object({
     id: z.number(),
     title: z.string(),
+    isDraft: z.boolean().optional(),
     introText: z.string(),
     publishedOn: z.date(),
     mp3Url: z.string().url(),
@@ -30,12 +40,7 @@ const guestsCollection = defineCollection({
     name: z.string(),
     avatarUrl: z.string().url(),
     shows: z.array(reference("shows")),
-    links: z.array(
-      z.object({
-        label: z.string(),
-        url: z.string().url(),
-      }),
-    ),
+    links,
   }),
 });
 
@@ -43,7 +48,7 @@ const navabarTeamCollection = defineCollection({
   schema: z.object({
     name: z.string(),
     avatarUrl: z.string().url(),
-    role: z.string(),
+    links,
   }),
 });
 

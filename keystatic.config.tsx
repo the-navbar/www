@@ -92,12 +92,15 @@ export default config({
         contentField: "showNotes",
       },
       columns: ["introText", "publishedOn"],
-      entryLayout: "content",
       schema: {
         title: fields.slug({
           name: { label: "Title" },
         }),
         publishedOn: fields.date({ label: "Published on" }),
+        isDraft: fields.checkbox({
+          label: "Draft",
+          description: "Check to prevent the show from being published",
+        }),
         id: fields.number({
           label: "ID",
         }),

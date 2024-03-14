@@ -1,15 +1,13 @@
 ---
 import { type GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
 
 import Layout from "@/layouts/BaseLayout.astro";
 import ShowsGrid from "@/components/ShowsGrid.astro";
+import { getLatestShows } from "@/utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const shows = await getCollection("shows");
-  const sortedShows = shows.sort((a, b) => b.data.id - a.data.id);
-
-  return paginate(sortedShows, { pageSize: 15 });
+  const shows = await getLatestShows();
+  return paginate(shows, { pageSize: 15 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
