@@ -6,7 +6,7 @@ type AudioPlayerProps = {
 const { url } = Astro.props as AudioPlayerProps;
 ---
 
-<media-controller audio class="bg-transparent">
+<media-controller audio class="w-full bg-transparent">
   <audio slot="media" src={url}></audio>
   <media-control-bar class="w-full rounded-lg bg-slate-200 p-8">
     <media-play-button></media-play-button>
