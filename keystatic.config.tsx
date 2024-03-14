@@ -89,9 +89,9 @@ export default config({
       path: "src/content/shows/*",
       slugField: "title",
       format: {
-        contentField: "description",
+        contentField: "showNotes",
       },
-      columns: ["publishedOn"],
+      columns: ["introText", "publishedOn"],
       entryLayout: "content",
       schema: {
         title: fields.slug({
