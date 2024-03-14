@@ -1,26 +1,39 @@
-import { collection, config, fields, singleton } from "@keystatic/core";
+import {
+  collection,
+  config,
+  fields,
+  singleton,
+  type LocalConfig,
+  type GitHubConfig,
+} from "@keystatic/core";
 import { Icon } from "@keystar/ui/icon";
 import { mic2Icon } from "@keystar/ui/icon/icons/mic2Icon";
-import { __experimental_mdx_field } from "@keystatic/core/form/fields/markdoc";
+
+import { links } from "@/keystatic/links";
+
+const localStorage: LocalConfig["storage"] = {
+  kind: "local",
+};
+
+const gitHubStorage: GitHubConfig["storage"] = {
+  kind: "github",
+  repo: "the-navbar/www",
+};
 
 export default config({
-  storage: {
-    kind: process.env.NODE_ENV === "production" ? "cloud" : "local",
-  },
-  // Keystatic cloud project key
-  cloud: { project: "simonswiss/the-navbar" },
+  storage: process.env.NODE_ENV === "production" ? gitHubStorage : localStorage,
   ui: {
     brand: {
       name: "The NavBar Podcast",
       mark: () => <Icon src={mic2Icon} />,
     },
     navigation: {
-      "Take a sip of water!": ["shows", "settings"],
+      "Take a sip of water!": ["shows", "guests", "navbarTeam", "settings"],
     },
   },
   singletons: {
     settings: singleton({
-      label: "Settings",
+      label: "Site Settings",
       path: "src/content/settings/index",
       format: {
         data: "json",
@@ -53,9 +66,16 @@ export default config({
             isRequired: true,
           },
         }),
-        twitterHandle: fields.text({
-          label: "Twitter handle",
-          description: "Your Twitter handle, without the @ symbol",
+        twitterUrl: fields.text({
+          label: "Twitter URL",
+          description: "The Twitter URL for the NavBar account",
+          validation: {
+            isRequired: true,
+          },
+        }),
+        discordInviteUrl: fields.text({
+          label: "Discord Invite URL",
+          description: "The URL to join the NavBar Discord server",
           validation: {
             isRequired: true,
           },
@@ -63,21 +83,24 @@ export default config({
       },
     }),
   },
-
   collections: {
     shows: collection({
       label: "Shows",
       path: "src/content/shows/*",
       slugField: "title",
       format: {
-        contentField: "description",
+        contentField: "showNotes",
       },
-      entryLayout: "content",
+      columns: ["introText", "publishedOn"],
       schema: {
         title: fields.slug({
           name: { label: "Title" },
         }),
         publishedOn: fields.date({ label: "Published on" }),
+        isDraft: fields.checkbox({
+          label: "Draft",
+          description: "Check to prevent the show from being published",
+        }),
         id: fields.number({
           label: "ID",
         }),
@@ -90,9 +113,61 @@ export default config({
           description:
             "The ID of the YouTube video for this show — not the full URL",
         }),
-        description: __experimental_mdx_field({
+        introText: fields.text({
           label: "Description",
+          multiline: true,
         }),
+        showNotes: fields.mdx({ label: "Show notes" }),
+      },
+    }),
+    guests: collection({
+      label: "Guests",
+      path: "src/content/guests/*",
+      columns: ["name", "avatarUrl"],
+      format: {
+        data: "json",
+      },
+      slugField: "name",
+      schema: {
+        name: fields.slug({
+          name: { label: "Name", validation: { isRequired: true } },
+        }),
+        avatarUrl: fields.url({
+          label: "Avatar URL",
+          description: "The URL for the guest's avatar",
+          validation: { isRequired: true },
+        }),
+        shows: fields.array(
+          fields.relationship({
+            label: "Shows",
+            collection: "shows",
+            validation: { isRequired: true },
+          }),
+          {
+            label: "Shows",
+            description: "Episodes this guest has appeared in.",
+            itemLabel: (props) => props.value || "",
+          },
+        ),
+        links,
+      },
+    }),
+    navbarTeam: collection({
+      label: "The NavBar Team",
+      path: "src/content/team/*",
+      slugField: "name",
+      format: { contentField: "bio" },
+      schema: {
+        name: fields.slug({
+          name: { label: "Name", validation: { isRequired: true } },
+        }),
+        avatarUrl: fields.url({
+          label: "Avatar URL",
+          description: "The URL for the team member's avatar",
+          validation: { isRequired: true },
+        }),
+        bio: fields.mdx({ label: "Bio" }),
+        links,
       },
     }),
   },

@@ -11,7 +11,18 @@ import alpinejs from "@astrojs/alpinejs";
 // https://astro.build/config
 export default defineConfig({
   site: "https://navbar.tech",
-  integrations: [tailwind(), react(), mdx(), htmx(), keystaticAstro(), alpinejs()],
+  integrations: [
+    tailwind(),
+    react(),
+    mdx(),
+    htmx(),
+    keystaticAstro(),
+    alpinejs(),
+  ],
   output: "hybrid",
-  adapter: vercel()
+  adapter: vercel(),
+  image: {
+    domains: ["avatars.githubusercontent.com"],
+    remotePatterns: [{ protocol: "https" }],
+  },
 });

@@ -8,12 +8,31 @@ const settings = await getEntry("settings", "index");
   class="mx-auto mb-20 flex w-full max-w-7xl flex-col items-center justify-between gap-2 px-4 py-8 sm:flex-row sm:gap-8 sm:px-6 lg:px-8"
 >
   <p>Copyright &copy; {new Date().getFullYear()} — The NavBar.</p>
-  <p class="flex items-center justify-center gap-4">
-    <span>Tweeeeet at us:</span>
+  <nav class="flex flex-col items-end gap-2">
+    <!-- Discord -->
     <a
-      href={`https://twitter.com/${settings.data.twitterHandle}`}
-      class="inline-block"
+      href={settings.data.discordInviteUrl}
+      class="group flex items-center justify-center gap-4"
     >
+      <span class="group-hover:underline">Join the Discord</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="size-6 group-hover:-rotate-6"
+        preserveAspectRatio="xMidYMid"
+        viewBox="0 -28.5 256 256"
+        ><path
+          fill="currentColor"
+          d="M216.86 16.6A208.5 208.5 0 0 0 164.04 0a154.86 154.86 0 0 0-6.76 14.05 193.92 193.92 0 0 0-58.54 0C96.91 9.65 94.2 4.1 91.9 0a207.8 207.8 0 0 0-52.86 16.64C5.62 67.14-3.44 116.4 1.1 164.96c22.17 16.55 43.65 26.6 64.77 33.19a161.1 161.1 0 0 0 13.88-22.85 136.41 136.41 0 0 1-21.85-10.63c1.83-1.36 3.62-2.78 5.35-4.24 42.13 19.7 87.9 19.7 129.51 0 1.76 1.46 3.55 2.88 5.36 4.24a136.07 136.07 0 0 1-21.89 10.65c4.01 8.02 8.64 15.67 13.88 22.85 21.14-6.58 42.64-16.64 64.81-33.21 5.32-56.3-9.08-105.1-38.05-148.36ZM85.47 135.1c-12.64 0-23.01-11.81-23.01-26.19 0-14.37 10.15-26.2 23.01-26.2 12.87 0 23.24 11.8 23.02 26.2.02 14.38-10.15 26.18-23.02 26.18Zm85.06 0c-12.65 0-23.02-11.81-23.02-26.19 0-14.37 10.15-26.2 23.02-26.2 12.86 0 23.23 11.8 23.01 26.2 0 14.38-10.15 26.18-23.01 26.18Z"
+        ></path></svg
+      >
+    </a>
+
+    <!-- Twitter -->
+    <a
+      href={settings.data.twitterUrl}
+      class="group flex items-center justify-center gap-4"
+    >
+      <span class="group-hover:underline">Tweeeeet at us</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -22,11 +41,11 @@ const settings = await getEntry("settings", "index");
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="size-6 hover:fill-black"
+        class="size-6 fill-black group-hover:-rotate-6"
         ><path
           d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
         ></path></svg
       >
     </a>
-  </p>
+  </nav>
 </footer>

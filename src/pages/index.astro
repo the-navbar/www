@@ -1,9 +1,13 @@
 ---
 import { getEntry } from "astro:content";
+
+import { getLatestShows } from "@/utils";
+
 import Layout from "../layouts/BaseLayout.astro";
-import ShowsList from "@/components/ShowsList.astro";
+import ShowsGrid from "@/components/ShowsGrid.astro";
 
 const settings = await getEntry("settings", "index");
+const lastEpisodes = await getLatestShows(9);
 ---
 
 <Layout title="Welcome to...">
@@ -14,9 +18,17 @@ const settings = await getEntry("settings", "index");
         <p>{settings.data.description}</p>
       </div>
     </div>
-    <h2 class="mt-16 text-2xl font-medium">Episodes</h2>
+    <div class="flex items-center justify-between">
+      <h2 class="mt-16 text-2xl font-medium">Latest Episodes</h2>
+      <a
+        href="/shows"
+        class="mt-10 flex items-center gap-2 rounded-md bg-gradient-to-r from-sky-100 to-emerald-100 px-4 py-2 text-sm font-medium text-emerald-950 ring-1 ring-emerald-400 transition hover:from-sky-200 hover:to-emerald-200"
+      >
+        View All Episodes
+      </a>
+    </div>
     <div class="mt-6">
-      <ShowsList />
+      <ShowsGrid shows={lastEpisodes} />
     </div>
   </div>
 </Layout>

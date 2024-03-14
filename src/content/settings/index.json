@@ -3,5 +3,6 @@
   "ogImage": "@/assets/settings/ogImage.png",
   "title": "Welcome to the NavBar!",
   "description": "The NavBar is a podcast by Jon Meyers and Simon Vrachliotis, covering all things web development and content creation.",
-  "twitterHandle": "the_navbar"
+  "twitterUrl": "https://twitter.com/the_navbar",
+  "discordInviteUrl": "https://discord.gg/7MVnxUX6dY"
 }

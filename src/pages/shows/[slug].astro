@@ -1,5 +1,8 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+
+import { Image } from "astro:assets";
+
 import Layout from "@/layouts/BaseLayout.astro";
 import YouTubeVideo from "@/components/YouTubeVideo.astro";
 
@@ -12,6 +15,14 @@ export async function getStaticPaths() {
 
 const show = await getEntry("shows", Astro.params.slug);
 
+const guests = await getCollection("guests");
+const showGuests = guests.filter((guest) => {
+  const shows = guest.data.shows.map((show) => show.slug);
+  return shows.includes(show.slug);
+});
+
+const navbarTeam = await getCollection("navbarTeam");
+
 const { Content } = await show.render();
 
 const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
@@ -21,48 +32,100 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
 });
 ---
 
-<Layout title={show.data.title} description={show.body.slice(0, 156) + "..."}>
-  <div class="mx-auto max-w-2xl px-4 py-16">
-    <h1 class="text-2xl font-medium">{show.data.title}</h1>
-    <p class="mt-2 text-sm font-medium text-slate-600">
-      Episode {show.data.id} &middot; Published on <time
-        datetime={show.data.publishedOn.toString()}>{prettyDate}</time
-      >
-    </p>
+<Layout title={show.data.title} description={show.data.introText}>
+  <div class="prose prose-slate mx-auto max-w-2xl px-4 py-16 lg:prose-lg">
+    <h1 class="mb-2 text-balance lg:mb-2">{show.data.title}</h1>
 
-    <div class="mt-8">
-      <button
-        @click={`$store.player.start_show('${show.slug}')`}
-        class="group flex items-center gap-4 rounded-lg bg-white px-6 py-4 shadow
-        ring-1 ring-black/5 transition duration-75 hover:shadow-md hover:ring-black/20"
-      >
-        <span class="font-medium text-slate-500 group-hover:text-slate-800">
-          Play this episode</span
+    <div class="not-prose mb-8">
+      <p class="mt-0">
+        Episode {show.data.id} &middot; Published on <time
+          datetime={show.data.publishedOn.toString()}>{prettyDate}</time
         >
-      </button>
-    </div>
-
-    <div class="grid gap-2 text-lg text-slate-600">
-      <div class="prose prose-slate mt-8 lg:prose-lg">
-        <Content
-          components={{
-            YouTubeVideo,
-          }}
-        />
-      </div>
+      </p>
       {
-        show.data?.youtubeVideoId && (
-          <>
-            <hr class="mt-8" />
-            <div class="mt-8 grid gap-8">
-              <h2 class="text-2xl font-medium">
-                Watch the video version of this episode
-              </h2>
-              <YouTubeVideo videoId={show.data.youtubeVideoId} />
-            </div>
-          </>
+        showGuests.length > 0 && (
+          <div class="mt-8">
+            <p class="inline-block -translate-x-4 -rotate-6 bg-gradient-to-r from-sky-500 to-emerald-500 px-3 py-0.5 text-sm font-medium text-white">
+              Featuring:
+            </p>
+            <ul class="not-prose mt-2 flex items-center gap-4">
+              {showGuests.map((guest) => (
+                <li class="flex items-center gap-4">
+                  <Image
+                    src={guest.data.avatarUrl}
+                    height={240}
+                    width={240}
+                    class="size-20 rounded-full object-cover shadow-lg ring ring-sky-500"
+                    alt=""
+                  />
+                  <div>
+                    <h3 class="text-lg font-medium">{guest.data.name}</h3>
+                    {guest.data.links.length > 0 && (
+                      <ul class="flex gap-4">
+                        {guest.data.links.map((link) => (
+                          <li>
+                            <a
+                              href={link.url}
+                              class="text-sm underline hover:no-underline"
+                            >
+                              {link.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )
       }
     </div>
+
+    <AudioPlayer url={show.data.mp3Url} />
+    <div class="mt-8">
+      <Content />
+    </div>
+
+    <!-- YouTube video -->
+    {
+      show.data?.youtubeVideoId && (
+        <>
+          <hr />
+
+          <h2>Watch the video version of this episode</h2>
+          <div class="not-prose">
+            <YouTubeVideo videoId={show.data.youtubeVideoId} />
+          </div>
+        </>
+      )
+    }
+    <hr />
+    <h2>Want more NavBar? 🍔🍫</h2>
+    <ul class="flex list-none flex-wrap gap-6 p-0">
+      <li>🐦 <a href="https://twitter.com/the_navbar">Twitter</a></li>
+      <li>🎥 <a href="https://www.youtube.com/@the_navbar">YouTube</a></li>
+    </ul>
+
+    <h3>Simon's stuff</h3>
+    <ul class="flex list-none flex-wrap gap-6 p-0">
+      <li>🐦 <a href="https://twitter.com/simonswiss">Twitter</a></li>
+      <li>🎥 <a href="https://www.youtube.com/@simonswiss">YouTube</a></li>
+      <li>
+        🥚 <a href="https://egghead.io/q/resources-by-simon-vrachliotis"
+          >egghead</a
+        >
+      </li>
+    </ul>
+
+    <h3>Jon's stuff</h3>
+    <ul class="flex list-none flex-wrap gap-6 p-0">
+      <li>🐦 <a href="https://twitter.com/jonmeyers_io">Twitter</a></li>
+      <li>🎥 <a href="https://www.youtube.com/c/jonmeyers">YouTube</a></li>
+      <li>
+        🥚 <a href="https://egghead.io/q/resources-by-jon-meyers">egghead</a>
+      </li>
+    </ul>
   </div>
 </Layout>
