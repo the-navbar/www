@@ -8,7 +8,8 @@ import {
 } from "@keystatic/core";
 import { Icon } from "@keystar/ui/icon";
 import { mic2Icon } from "@keystar/ui/icon/icons/mic2Icon";
-import { __experimental_mdx_field } from "@keystatic/core/form/fields/markdoc";
+
+import { links } from "@/keystatic/links";
 
 const localStorage: LocalConfig["storage"] = {
   kind: "local",
@@ -109,14 +110,19 @@ export default config({
           description:
             "The ID of the YouTube video for this show — not the full URL",
         }),
-        description: __experimental_mdx_field({
+        introText: fields.text({
           label: "Description",
+          multiline: true,
         }),
+        showNotes: fields.mdx({ label: "Show notes" }),
       },
     }),
     guests: collection({
       label: "Guests",
       path: "src/content/guests/*",
+      format: {
+        data: "json",
+      },
       slugField: "name",
       schema: {
         name: fields.slug({
@@ -131,35 +137,34 @@ export default config({
           fields.relationship({
             label: "Shows",
             collection: "shows",
+            validation: { isRequired: true },
           }),
           {
             label: "Shows",
             description: "Episodes this guest has appeared in.",
-            validation: { length: { min: 1 } },
             itemLabel: (props) => props.value || "",
           },
         ),
-        links: fields.array(
-          fields.object(
-            {
-              label: fields.text({
-                label: "Label",
-                validation: { isRequired: true },
-              }),
-              url: fields.url({
-                label: "URL",
-                validation: { isRequired: true },
-              }),
-            },
-            { label: "Link", layout: [4, 8] },
-          ),
-          {
-            label: "Links",
-            description: "Any personal links the guest would like to share.",
-            itemLabel: (props) =>
-              props.fields.label.value + " — " + props.fields.url.value,
-          },
-        ),
+        links,
+      },
+    }),
+    navbarTeam: collection({
+      label: "The NavBar Team",
+      path: "src/content/team/*",
+      slugField: "name",
+      format: { contentField: "bio" },
+      entryLayout: "content",
+      schema: {
+        name: fields.slug({
+          name: { label: "Name", validation: { isRequired: true } },
+        }),
+        avatarUrl: fields.url({
+          label: "Avatar URL",
+          description: "The URL for the team member's avatar",
+          validation: { isRequired: true },
+        }),
+        bio: fields.mdx({ label: "Bio" }),
+        links,
       },
     }),
   },

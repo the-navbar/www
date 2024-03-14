@@ -13,4 +13,8 @@ export default defineConfig({
   integrations: [tailwind(), react(), mdx(), htmx(), keystaticAstro()],
   output: "hybrid",
   adapter: vercel(),
+  image: {
+    domains: ["avatars.githubusercontent.com"],
+    remotePatterns: [{ protocol: "https" }],
+  },
 });

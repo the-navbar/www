@@ -1,5 +1,8 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+
+import { Image } from "astro:assets";
+
 import Layout from "@/layouts/BaseLayout.astro";
 import AudioPlayer from "@/components/AudioPlayer.astro";
 import YouTubeVideo from "@/components/YouTubeVideo.astro";
@@ -28,7 +31,7 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
 });
 ---
 
-<Layout title={show.data.title} description={show.body.slice(0, 156) + "..."}>
+<Layout title={show.data.title} description={show.data.introText}>
   <div class="mx-auto max-w-2xl px-4 py-16">
     <h1 class="text-2xl font-medium">{show.data.title}</h1>
     <p class="mt-2 text-sm font-medium text-slate-600">
@@ -44,8 +47,10 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
           <ul class="mt-4 flex items-center gap-4">
             {showGuests.map((guest) => (
               <li class="flex items-center gap-4">
-                <img
+                <Image
                   src={guest.data.avatarUrl}
+                  height={240}
+                  width={240}
                   class="size-20 rounded-full object-cover shadow-lg ring-1 ring-black/5"
                   alt=""
                 />

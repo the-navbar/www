@@ -15,8 +15,9 @@ const settingsCollection = defineCollection({
 
 const showsCollection = defineCollection({
   schema: z.object({
-    title: z.string(),
     id: z.number(),
+    title: z.string(),
+    introText: z.string(),
     publishedOn: z.date(),
     mp3Url: z.string().url(),
     youtubeVideoId: z.string().optional(),
@@ -24,6 +25,7 @@ const showsCollection = defineCollection({
 });
 
 const guestsCollection = defineCollection({
+  type: "data",
   schema: z.object({
     name: z.string(),
     avatarUrl: z.string().url(),
