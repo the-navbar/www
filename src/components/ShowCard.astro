@@ -12,7 +12,9 @@ const { show } = Astro.props as ShowCardProps;
   class="relative grid content-between justify-items-start gap-6 rounded-lg bg-white p-6 shadow-md ring-1 ring-black/5 transition hover:-translate-y-px hover:shadow-lg"
 >
   <div>
-    <h2 class="text-lg font-medium sm:text-2xl">{show.data.title}</h2>
+    <h2 class="text-pretty text-lg font-medium sm:text-2xl">
+      {show.data.title}
+    </h2>
     <p class="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">
       {show.data.introText}
     </p>
