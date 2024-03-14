@@ -1,0 +1,32 @@
+---
+import { CollectionEntry } from "astro:content";
+
+type PlayButtonProps = {
+  show: CollectionEntry<"shows">;
+};
+
+const { show } = Astro.props as PlayButtonProps;
+---
+
+<!-- 1. If the current show is not set to the player, set default "assign show button" -->
+<template
+  x-if={`!$store.player.show || $store.player.show.slug !== '${show.slug}'`}
+>
+  <button
+    class="z-10 flex items-center gap-2 rounded-md bg-gradient-to-r from-sky-50 to-emerald-50 px-4 py-2 text-sm font-medium text-emerald-950 ring-1 ring-emerald-300 transition hover:from-sky-100 hover:to-emerald-100"
+    @click={`$store.player.set('${show.slug}')`}
+  >
+    Play episode
+  </button>
+</template>
+
+<!-- 2. If this is the current show, display the <media-play-button> instead -->
+<template x-if={`$store.player.show.slug === '${show.slug}'`}>
+  <media-play-button
+    mediacontroller="audio-player"
+    class="z-10 rounded-md bg-gradient-to-r from-sky-50 to-emerald-50 px-4 py-2 font-poppins text-sm font-medium text-emerald-950 ring-1 ring-emerald-300 transition hover:from-sky-100 hover:to-emerald-100"
+  >
+    <span slot="play">Play episode</span>
+    <span slot="pause">Pause episode</span>
+  </media-play-button>
+</template>

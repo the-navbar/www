@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 
 import Layout from "@/layouts/BaseLayout.astro";
 import YouTubeVideo from "@/components/YouTubeVideo.astro";
+import PlayButton from "@/components/PlayButton.astro";
 
 export async function getStaticPaths() {
   const shows = await getCollection("shows");
@@ -83,58 +84,50 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
     </div>
 
     <div class="mt-8">
-      <media-play-button
-        mediacontroller="audio-player"
-        class="inline-flex items-center gap-4 rounded-lg bg-transparent bg-white p-0 px-6 py-4 font-poppins text-base font-medium text-slate-500 shadow ring-1 ring-black/5 transition duration-75 hover:text-slate-700 hover:shadow-md hover:ring-black/20"
-        @click={`$store.player.set('${show.slug}')`}
-      >
-        <span slot="play">Play this episode</span>
-        <span slot="pause">Pause this episode</span>
-      </media-play-button>
+      <PlayButton show={show} />
+      <div class="mt-8">
+        <Content />
+      </div>
+
+      <!-- YouTube video -->
+      {
+        show.data?.youtubeVideoId && (
+          <>
+            <hr />
+
+            <h2>Watch the video version of this episode</h2>
+            <div class="not-prose">
+              <YouTubeVideo videoId={show.data.youtubeVideoId} />
+            </div>
+          </>
+        )
+      }
+      <hr />
+      <h2>Want more NavBar? 🍔🍫</h2>
+      <ul class="flex list-none flex-wrap gap-6 p-0">
+        <li>🐦 <a href="https://twitter.com/the_navbar">Twitter</a></li>
+        <li>🎥 <a href="https://www.youtube.com/@the_navbar">YouTube</a></li>
+      </ul>
+
+      <h3>Simon's stuff</h3>
+      <ul class="flex list-none flex-wrap gap-6 p-0">
+        <li>🐦 <a href="https://twitter.com/simonswiss">Twitter</a></li>
+        <li>🎥 <a href="https://www.youtube.com/@simonswiss">YouTube</a></li>
+        <li>
+          🥚 <a href="https://egghead.io/q/resources-by-simon-vrachliotis"
+            >egghead</a
+          >
+        </li>
+      </ul>
+
+      <h3>Jon's stuff</h3>
+      <ul class="flex list-none flex-wrap gap-6 p-0">
+        <li>🐦 <a href="https://twitter.com/jonmeyers_io">Twitter</a></li>
+        <li>🎥 <a href="https://www.youtube.com/c/jonmeyers">YouTube</a></li>
+        <li>
+          🥚 <a href="https://egghead.io/q/resources-by-jon-meyers">egghead</a>
+        </li>
+      </ul>
     </div>
-
-    <div class="mt-8">
-      <Content />
-    </div>
-
-    <!-- YouTube video -->
-    {
-      show.data?.youtubeVideoId && (
-        <>
-          <hr />
-
-          <h2>Watch the video version of this episode</h2>
-          <div class="not-prose">
-            <YouTubeVideo videoId={show.data.youtubeVideoId} />
-          </div>
-        </>
-      )
-    }
-    <hr />
-    <h2>Want more NavBar? 🍔🍫</h2>
-    <ul class="flex list-none flex-wrap gap-6 p-0">
-      <li>🐦 <a href="https://twitter.com/the_navbar">Twitter</a></li>
-      <li>🎥 <a href="https://www.youtube.com/@the_navbar">YouTube</a></li>
-    </ul>
-
-    <h3>Simon's stuff</h3>
-    <ul class="flex list-none flex-wrap gap-6 p-0">
-      <li>🐦 <a href="https://twitter.com/simonswiss">Twitter</a></li>
-      <li>🎥 <a href="https://www.youtube.com/@simonswiss">YouTube</a></li>
-      <li>
-        🥚 <a href="https://egghead.io/q/resources-by-simon-vrachliotis"
-          >egghead</a
-        >
-      </li>
-    </ul>
-
-    <h3>Jon's stuff</h3>
-    <ul class="flex list-none flex-wrap gap-6 p-0">
-      <li>🐦 <a href="https://twitter.com/jonmeyers_io">Twitter</a></li>
-      <li>🎥 <a href="https://www.youtube.com/c/jonmeyers">YouTube</a></li>
-      <li>
-        🥚 <a href="https://egghead.io/q/resources-by-jon-meyers">egghead</a>
-      </li>
-    </ul>
   </div>
 </Layout>

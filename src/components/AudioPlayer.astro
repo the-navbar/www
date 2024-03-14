@@ -11,7 +11,7 @@ const shows = await getCollection("shows");
     audio
     :class="$store.player.show ? 'fixed' : 'hidden'"
     class={cx(
-      "inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
+      "z-30 inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
       "[--media-preview-background:theme(colors.emerald.100)] [--media-secondary-color:transparent] [--media-primary-color:theme(colors.slate.900)] [--media-control-hover-background:rgb(0_0_0/0.05)]",
     )}
   >
