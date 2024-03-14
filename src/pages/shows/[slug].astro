@@ -22,6 +22,8 @@ const showGuests = guests.filter((guest) => {
   return shows.includes(show.slug);
 });
 
+const navbarTeam = await getCollection("navbarTeam");
+
 const { Content } = await show.render();
 
 const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {

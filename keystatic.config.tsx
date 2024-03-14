@@ -28,12 +28,12 @@ export default config({
       mark: () => <Icon src={mic2Icon} />,
     },
     navigation: {
-      "Take a sip of water!": ["shows", "guests", "settings"],
+      "Take a sip of water!": ["shows", "guests", "navbarTeam", "settings"],
     },
   },
   singletons: {
     settings: singleton({
-      label: "Settings",
+      label: "Site Settings",
       path: "src/content/settings/index",
       format: {
         data: "json",
@@ -120,6 +120,7 @@ export default config({
     guests: collection({
       label: "Guests",
       path: "src/content/guests/*",
+      columns: ["name", "avatarUrl"],
       format: {
         data: "json",
       },
@@ -153,7 +154,6 @@ export default config({
       path: "src/content/team/*",
       slugField: "name",
       format: { contentField: "bio" },
-      entryLayout: "content",
       schema: {
         name: fields.slug({
           name: { label: "Name", validation: { isRequired: true } },
