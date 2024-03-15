@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 const shows = await getCollection("shows");
 ---
 
-<div x-show="$store.player.show" transition:persist>
+<div x-show="$store.player.show" transition:name="player">
   <media-controller
     id="audio-player"
     audio
