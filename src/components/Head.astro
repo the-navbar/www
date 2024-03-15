@@ -47,10 +47,9 @@ const settings = await getEntry("settings", "index");
   />
 
   <!-- Media Chrome audio player -->
-  <script
-    type="module"
-    is:inline
-    src="https://cdn.jsdelivr.net/npm/media-chrome@1/+esm"></script>
+  <script>
+    import "media-chrome";
+  </script>
 
   <!-- Google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

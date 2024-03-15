@@ -5,10 +5,11 @@ import { getCollection } from "astro:content";
 const shows = await getCollection("shows");
 ---
 
-<div x-show="$store.player.show" transition:name="player">
+<div x-show="$store.player.show">
   <media-controller
     id="audio-player"
     audio
+    transition:persist="player"
     :class="$store.player.show ? 'fixed' : 'hidden'"
     class={cx(
       "z-30 inset-x-0 bottom-0 bg-white/90 backdrop-blur-sm bg-gradient-to-r from-sky-100/30 via-white to-emerald-100/30 p-4 ring-1 ring-black/5 shadow-[0_7px_10px_5px_rgb(0_0_0/0.2)]",
