@@ -19,14 +19,17 @@ const shows = await getCollection("shows");
     <audio
       x-ref="audio"
       slot="media"
+      :onload="console.log('loaded')"
+      :onchange="console.log('changed')"
       :src="$store.player.show && $store.player.show.data.mp3Url"></audio>
 
     <div class="mb-4 flex h-6 items-center justify-between">
-      <p
-        class="font-medium text-slate-900"
+      <a
+        :href="$store.player.show && /shows/ + $store.player.show.slug"
+        class="block font-medium text-slate-900 hover:underline"
         x-text="$store.player.show && $store.player.show.data.title"
       >
-      </p>
+      </a>
 
       <button @click="$refs.audio.pause(); $store.player.reset();">
         <svg
@@ -34,14 +37,18 @@ const shows = await getCollection("shows");
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
+          stroke-width="3"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="size-5 stroke-slate-600 hover:stroke-slate-900"
+          class="size-5 stroke-black hover:stroke-cyan-500"
           ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
         >
       </button>
     </div>
+
+    <media-loading-indicator
+      class="pointer-events-none absolute inset-0 grid grid-rows-[1fr,0] place-items-center [--media-icon-color:theme(colors.emerald.500)] [--media-loading-indicator-icon-height:theme(space.20)]"
+    ></media-loading-indicator>
 
     <media-control-bar class={cx("w-full bg-transparent")}>
       <media-play-button></media-play-button>
