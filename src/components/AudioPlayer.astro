@@ -27,7 +27,7 @@ const shows = await getCollection("shows");
       >
       </p>
 
-      <button @click="$store.player.reset()">
+      <button @click="$refs.audio.pause(); $store.player.reset();">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
