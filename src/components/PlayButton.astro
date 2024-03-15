@@ -15,7 +15,11 @@ const { show } = Astro.props as PlayButtonProps;
   <button
     transition:name={`play-button-${show.slug}`}
     class="z-10 flex items-center gap-2 rounded-md bg-gradient-to-r from-sky-50 to-emerald-50 px-4 py-2 text-sm font-medium text-emerald-950 ring-1 ring-emerald-300 transition hover:from-sky-100 hover:to-emerald-100"
-    @click={`$store.player.set('${show.slug}')`}
+    @click={`
+      $store.player.set('${show.slug}'); 
+      const audio = $refs.audio;
+      $nextTick(() => $refs.audio.play());
+    `}
   >
     Play episode
   </button>
