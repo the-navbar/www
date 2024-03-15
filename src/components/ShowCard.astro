@@ -1,6 +1,10 @@
 ---
 import { type CollectionEntry } from "astro:content";
 
+import PlayButton from "@/components/PlayButton.astro";
+
+import { getPrettyDate } from "@/utils";
+
 type ShowCardProps = {
   show: CollectionEntry<"shows">;
 };
@@ -12,34 +16,30 @@ const { show } = Astro.props as ShowCardProps;
   class="relative grid content-between justify-items-start gap-6 rounded-lg bg-white p-6 shadow-md ring-1 ring-black/5 transition hover:-translate-y-px hover:shadow-lg"
 >
   <div>
-    <h2 class="text-pretty text-lg font-medium sm:text-2xl">
+    <h2
+      class="text-pretty text-lg font-medium sm:text-2xl"
+      transition:name={`title-${show.slug}`}
+    >
       {show.data.title}
     </h2>
-    <p class="mt-4 line-clamp-4 text-sm leading-6 text-slate-600">
+
+    <time
+      transition:name={`published-on-${show.slug}`}
+      datetime={show.data.publishedOn.toString()}
+      class="mt-2 block text-sm leading-6 text-slate-600"
+      >{getPrettyDate(show.data.publishedOn, "short")}</time
+    >
+
+    <p
+      class="mt-4 line-clamp-4 text-sm leading-6 text-slate-600"
+      transition:name={`intro-text-${show.slug}`}
+    >
       {show.data.introText}
     </p>
   </div>
-  {
-    /* Uncomment this play button below when the player is implemented :)
-  
-   <button class="z-20 flex items-center gap-2 rounded-md bg-gradient-to-r from-sky-100 to-emerald-100 px-4 py-2 text-sm font-medium text-emerald-950 ring-1 ring-emerald-400 transition hover:from-sky-200 hover:to-emerald-200">
-     <svg
-       xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="-ml-px size-5 shrink-0 stroke-emerald-800"
-     >
-       <circle cx="12" cy="12" r="10" />
-       <polygon points="10 8 16 12 10 16 10 8" />
-     </svg>
-     <span>Play episode</span>
-   </button>
-   */
-  }
+
+  <PlayButton show={show} />
+
   <a
     href={`/shows/${show.slug}`}
     class="absolute inset-0"

@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/alpinejs": "^0.4.0",
     "@astrojs/check": "^0.5.9",
     "@astrojs/mdx": "^2.2.0",
     "@astrojs/react": "^3.1.0",
@@ -18,8 +19,10 @@
     "@keystatic/astro": "^5.0.0",
     "@keystatic/core": "^0.5.3",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/alpinejs": "^3.13.6",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
+    "alpinejs": "^3.13.5",
     "astro": "^4.5.3",
     "astro-htmx": "^1.0.5",
     "astro-seo": "^0.8.2",

@@ -1,11 +1,12 @@
 ---
 import { getCollection, getEntry } from "astro:content";
-
 import { Image } from "astro:assets";
 
 import Layout from "@/layouts/BaseLayout.astro";
-import AudioPlayer from "@/components/AudioPlayer.astro";
 import YouTubeVideo from "@/components/YouTubeVideo.astro";
+import PlayButton from "@/components/PlayButton.astro";
+
+import { getPrettyDate } from "@/utils";
 
 export async function getStaticPaths() {
   const shows = await getCollection("shows");
@@ -22,28 +23,25 @@ const showGuests = guests.filter((guest) => {
   return shows.includes(show.slug);
 });
 
-const navbarTeam = await getCollection("navbarTeam");
-
 const { Content } = await show.render();
-
-const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
 ---
 
 <Layout title={show.data.title} description={show.data.introText}>
   <div class="prose prose-slate mx-auto max-w-2xl px-4 py-16 lg:prose-lg">
-    <h1 class="mb-2 text-balance lg:mb-2">{show.data.title}</h1>
+    <h1
+      class="mb-2 text-balance lg:mb-2"
+      transition:name={`title-${show.slug}`}
+    >
+      {show.data.title}
+    </h1>
 
     <div class="not-prose mb-8">
-      <p class="mt-0">
+      <p class="mt-0" transition:name={`published-on-${show.slug}`}>
         Episode {show.data.id} &middot; Published on <time
-          datetime={show.data.publishedOn.toString()}>{prettyDate}</time
+          datetime={show.data.publishedOn.toString()}
+          >{getPrettyDate(show.data.publishedOn)}</time
         >
       </p>
-
       {
         showGuests.length > 0 && (
           <div class="mt-8">
@@ -85,49 +83,65 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
       }
     </div>
 
-    <AudioPlayer url={show.data.mp3Url} />
     <div class="mt-8">
-      <Content />
+      <PlayButton show={show} />
+
+      {
+        show.data.introText && (
+          <>
+            <p
+              class="mt-16 text-2xl"
+              transition:name={`intro-text-${show.slug}`}
+            >
+              {show.data.introText}
+            </p>
+            <hr />
+          </>
+        )
+      }
+      <div class="mt-8">
+        <Content />
+      </div>
+
+      <!-- YouTube video -->
+      {
+        show.data?.youtubeVideoId && (
+          <>
+            <hr />
+
+            <h2>Watch the video version of this episode</h2>
+            <div class="not-prose">
+              <YouTubeVideo videoId={show.data.youtubeVideoId} />
+            </div>
+          </>
+        )
+      }
+      <hr />
+      <h2>Want more NavBar? 🍔🍫</h2>
+      <ul class="flex list-none flex-wrap gap-6 p-0">
+        <li>🐦 <a href="https://twitter.com/the_navbar">Twitter</a></li>
+        <li>🎥 <a href="https://www.youtube.com/@the_navbar">YouTube</a></li>
+      </ul>
+
+      <h3>Simon's stuff</h3>
+      <ul class="flex list-none flex-wrap gap-6 p-0">
+        <li>🐦 <a href="https://twitter.com/simonswiss">Twitter</a></li>
+        <li>🎥 <a href="https://www.youtube.com/@simonswiss">YouTube</a></li>
+        <li>
+          🥚 <a href="https://egghead.io/q/resources-by-simon-vrachliotis"
+            >egghead</a
+          >
+        </li>
+      </ul>
+
+      <h3>Jon's stuff</h3>
+      <ul class="flex list-none flex-wrap gap-6 p-0">
+        <li>🐦 <a href="https://twitter.com/jonmeyers_io">Twitter</a></li>
+        <li>🎥 <a href="https://www.youtube.com/c/jonmeyers">YouTube</a></li>
+        <li>
+          🥚 <a href="https://egghead.io/q/resources-by-jon-meyers">egghead</a>
+        </li>
+      </ul>
     </div>
-
-    <!-- YouTube video -->
-    {
-      show.data?.youtubeVideoId && (
-        <>
-          <hr />
-
-          <h2>Watch the video version of this episode</h2>
-          <div class="not-prose">
-            <YouTubeVideo videoId={show.data.youtubeVideoId} />
-          </div>
-        </>
-      )
-    }
-    <hr />
-    <h2>Want more NavBar? 🍔🍫</h2>
-    <ul class="flex list-none flex-wrap gap-6 p-0">
-      <li>🐦 <a href="https://twitter.com/the_navbar">Twitter</a></li>
-      <li>🎥 <a href="https://www.youtube.com/@the_navbar">YouTube</a></li>
-    </ul>
-
-    <h3>Simon's stuff</h3>
-    <ul class="flex list-none flex-wrap gap-6 p-0">
-      <li>🐦 <a href="https://twitter.com/simonswiss">Twitter</a></li>
-      <li>🎥 <a href="https://www.youtube.com/@simonswiss">YouTube</a></li>
-      <li>
-        🥚 <a href="https://egghead.io/q/resources-by-simon-vrachliotis"
-          >egghead</a
-        >
-      </li>
-    </ul>
-
-    <h3>Jon's stuff</h3>
-    <ul class="flex list-none flex-wrap gap-6 p-0">
-      <li>🐦 <a href="https://twitter.com/jonmeyers_io">Twitter</a></li>
-      <li>🎥 <a href="https://www.youtube.com/c/jonmeyers">YouTube</a></li>
-      <li>
-        🥚 <a href="https://egghead.io/q/resources-by-jon-meyers">egghead</a>
-      </li>
-    </ul>
   </div>
 </Layout>
