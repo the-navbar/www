@@ -6,6 +6,8 @@ import Layout from "@/layouts/BaseLayout.astro";
 import YouTubeVideo from "@/components/YouTubeVideo.astro";
 import PlayButton from "@/components/PlayButton.astro";
 
+import { getPrettyDate } from "@/utils";
+
 export async function getStaticPaths() {
   const shows = await getCollection("shows");
   return shows.map((show) => ({
@@ -21,25 +23,23 @@ const showGuests = guests.filter((guest) => {
   return shows.includes(show.slug);
 });
 
-const team = await getCollection("team");
-
 const { Content } = await show.render();
-
-const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
 ---
 
 <Layout title={show.data.title} description={show.data.introText}>
   <div class="prose prose-slate mx-auto max-w-2xl px-4 py-16 lg:prose-lg">
-    <h1 class="mb-2 text-balance lg:mb-2">{show.data.title}</h1>
+    <h1
+      class="mb-2 text-balance lg:mb-2"
+      transition:name={`title-${show.slug}`}
+    >
+      {show.data.title}
+    </h1>
 
     <div class="not-prose mb-8">
-      <p class="mt-0">
+      <p class="mt-0" transition:name={`published-on-${show.slug}`}>
         Episode {show.data.id} &middot; Published on <time
-          datetime={show.data.publishedOn.toString()}>{prettyDate}</time
+          datetime={show.data.publishedOn.toString()}
+          >{getPrettyDate(show.data.publishedOn)}</time
         >
       </p>
       {
@@ -85,6 +85,20 @@ const prettyDate = new Date(show.data.publishedOn).toLocaleDateString("au-AU", {
 
     <div class="mt-8">
       <PlayButton show={show} />
+
+      {
+        show.data.introText && (
+          <>
+            <p
+              class="mt-16 text-2xl"
+              transition:name={`intro-text-${show.slug}`}
+            >
+              {show.data.introText}
+            </p>
+            <hr />
+          </>
+        )
+      }
       <div class="mt-8">
         <Content />
       </div>

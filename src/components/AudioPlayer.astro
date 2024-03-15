@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 const shows = await getCollection("shows");
 ---
 
-<div transition:persist>
+<div x-show="$store.player.show">
   <media-controller
     id="audio-player"
     audio
@@ -15,20 +15,18 @@ const shows = await getCollection("shows");
       "[--media-preview-background:theme(colors.emerald.100)] [--media-secondary-color:transparent] [--media-primary-color:theme(colors.slate.900)] [--media-control-hover-background:rgb(0_0_0/0.05)]",
     )}
   >
-    <template x-if="$store.player.show">
-      <audio autoplay slot="media" :src="$store.player.show.data.mp3Url"
-      ></audio>
-    </template>
+    <audio
+      autoplay
+      slot="media"
+      :src="$store.player.show && $store.player.show.data.mp3Url"></audio>
 
     <div class="mb-4 flex h-6 items-center justify-between">
-      <template x-if="$store.player.show">
-        <p
-          x-show="$store.player.show"
-          class="font-medium text-slate-900"
-          x-text="$store.player.show.data.title"
-        >
-        </p>
-      </template>
+      <p
+        class="font-medium text-slate-900"
+        x-text="$store.player.show && $store.player.show.data.title"
+      >
+      </p>
+
       <button @click="$store.player.reset()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
