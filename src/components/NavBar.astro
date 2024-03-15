@@ -2,6 +2,8 @@
 import { getEntry } from "astro:content";
 import Image from "astro/components/Image.astro";
 
+import { cx } from "@/utils";
+
 const settings = await getEntry("settings", "index");
 ---
 
@@ -16,10 +18,26 @@ const settings = await getEntry("settings", "index");
         alt="The NavBar logo"
       /></a
     >
-    <div class="flex gap-8">
+    <div class="flex gap-8 font-medium">
       <!-- <a href="/about">About</a> -->
-      <a class="font-medium hover:underline" href="/shows">Shows</a>
-      <a class="font-medium hover:underline" href="/suggestions">Suggestions</a>
+      <a
+        class={cx(
+          "hover:underline",
+          Astro.url.pathname.startsWith("/shows")
+            ? "text-black"
+            : "text-slate-500",
+        )}
+        href="/shows">Shows</a
+      >
+      <a
+        class={cx(
+          "hover:underline",
+          Astro.url.pathname.startsWith("/suggestions")
+            ? "text-black"
+            : "text-slate-500",
+        )}
+        href="/suggestions">Suggestions</a
+      >
     </div>
   </nav>
 </header>
