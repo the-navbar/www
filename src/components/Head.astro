@@ -24,6 +24,22 @@ const settings = await getEntry("settings", "index");
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width" />
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6V5Y0RB2GY"
+  ></script>
+  <script>
+    // @ts-ignore
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      // @ts-ignore
+      dataLayer.push(arguments);
+    }
+    // @ts-ignore
+    gtag("js", new Date());
+    // @ts-ignore
+    gtag("config", "G-6V5Y0RB2GY");
+  </script>
+
   <SEO
     title={title || settings.data.title}
     titleTemplate="%s | The NavBar Podcast"
